@@ -1,0 +1,12 @@
+Production rules:
+    - id: predecessor : cond -> successor : prob
+
+Scope rules:
+    - T(x,y,z): Translation of vector (x,y,z) to the scope position
+    - Rx(alpha), Ry(alpha), Rz(alpha): Rotation of angle alpha to the scope coordinate system
+    - S(x,y,z): Set the size of the scope
+    - [/]: Push/pop the current scope into the stack
+    - I(objId): Add an instance of the primitive with identifier objId to the current scope (cube, quad, cylinder, etc.)
+
+Split rule:
+    - Subdiv(axis,size1,size2,...,sizen) {shape1|shape2|...|shapen}:
