@@ -27,10 +27,10 @@ void S::performAction(Context &context)
     newScope->S(scale);
     context.pushScope(newScope);
 
-    // context.S();
     std::cout << "S (" << scale.x << ", " << scale.y << ", " << scale.z << ") ";
+    glm::vec3 pos = context.getTopScope()->getPosition();
     glm::vec3 size = context.getTopScope()->getSize();
-    std::cout << " -- Current scope -> POS: (" << size.x << ", " << size.y << ", " << size.z << ") SIZE: (" << size.x << ", " << size.y << ", " << size.z << ") " << std::endl;
+    std::cout << " -- Current scope -> POS: (" << pos.x << ", " << pos.y << ", " << pos.z << ") SIZE: (" << size.x << ", " << size.y << ", " << size.z << ") " << std::endl;
 }
 
 std::string S::getShapeType()

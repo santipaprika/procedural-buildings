@@ -23,7 +23,7 @@ Grammar::Grammar(const std::string &filePath)
         std::string leftShapeType, rightShapeType;
         lin >> leftShapeType >> arrow >> arrow;
         Rule *rule = new Rule(false);
-        rule->left = {leftShapeType};
+        rule->left = leftShapeType;
         rule->right = {{}};
         while (lin >> rightShapeType) {
             Shape* shape;
