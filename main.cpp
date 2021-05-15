@@ -10,7 +10,10 @@ void generateGeometry(const std::list<Shape*> &shapes)
     Context context;
     for (Shape *shape : shapes) {
         shape->performAction(context);
-        delete shape;
+    }
+
+    for (Shape *shape : shapes) {
+        if (shape) delete shape;
     }
 }
 
@@ -28,7 +31,7 @@ int main(){
             Shape *shape = shapes.front();
             shapes.pop_front();
             if(!shape->isTerminal()) {
-                Rule *rule = grammar.findRule(shape);
+                Rule *rule = Grammar::findRule(shape);
                 if (!rule) {
                     std::cerr << "E: No rule found for non-terminal shape, can't continue expanding." << std::endl;
                     std::exit(-1);
