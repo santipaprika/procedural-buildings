@@ -18,8 +18,7 @@ public:
     Rule(bool test);
     std::list<Shape*> expand(Shape *shape);
 
+    // TODO: This could be a string?
     ShapeInstanceInfo left;
-    std::vector<std::vector<ShapeInstanceInfo>> right;
-private:
-    Shape* instantiateShape(ShapeInstanceInfo shapeInstanceInfo);
+    std::vector<std::vector<Shape*>> right;
 };

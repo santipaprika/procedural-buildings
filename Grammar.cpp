@@ -1,5 +1,6 @@
 #include "Grammar.h"
 #include "NonTerminalShape.h"
+#include "S.h"
 
 #include <fstream>
 #include <iostream>
@@ -25,7 +26,13 @@ Grammar::Grammar(const std::string &filePath)
         rule->left = {leftShapeType};
         rule->right = {{}};
         while (lin >> rightShapeType) {
-            rule->right[0].push_back({rightShapeType});
+            Shape* shape;
+            if (rightShapeType == "S" || rightShapeType == "Subdiv") { // TO DO: If rightShapeType in *list of parametric shapes*
+                shape = parseShapeParameters(rightShapeType, lin);
+            } else {
+                shape = new NonTerminalShape(rightShapeType);
+            }
+            rule->right[0].push_back(shape);
         }
         substitutionRules[leftShapeType] = rule;
     }
@@ -45,4 +52,17 @@ Rule* Grammar::findRule(Shape *shape)
 Shape* Grammar::initialShape() const
 {
     return new NonTerminalShape("X");
+}
+
+Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& lin) const
+{
+    // TO DO: Use switch instead of if?
+    if (shapeType == "S") {
+        char parenthesis;
+        int s1, s2, s3;
+        lin >> parenthesis >> s1 >> s2 >> s3 >> parenthesis;
+        return new S(glm::vec3(s1,s2,s3)); 
+    }
+
+    // ...
 }

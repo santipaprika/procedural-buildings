@@ -13,6 +13,7 @@ public:
     ~Grammar();
     Rule* findRule(Shape *shape);
     Shape* initialShape() const;
+    Shape* parseShapeParameters(std::string shapeType, std::istringstream& lin) const;
 private:
     using ShapeInstanceType = std::string;
     std::unordered_map<ShapeInstanceType, Rule*> substitutionRules;
