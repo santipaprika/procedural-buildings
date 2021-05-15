@@ -14,6 +14,5 @@ public:
     void performAction(Context &context) override;
     std::string getShapeType();
 private:
-    glm::vec3 scale;
-    // TODO: Store information regarding its parameters
+    glm::vec3 size;
 };

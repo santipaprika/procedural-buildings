@@ -6,9 +6,9 @@ S::S()
     
 }
 
-S::S(glm::vec3 scale)
+S::S(glm::vec3 size)
 {
-    this->scale = scale;
+    this->size = size;
 }
 
 S::~S()
@@ -24,12 +24,12 @@ bool S::isTerminal()
 void S::performAction(Context &context)
 {
     Scope* newScope = new Scope((*context.getTopScope()));
-    newScope->S(scale);
+    newScope->S(size);
     context.pushScope(newScope);
 
-    std::cout << "S (" << scale.x << ", " << scale.y << ", " << scale.z << ") ";
+    std::cout << "S (" << size.x << ", " << size.y << ", " << size.z << ") ";
     glm::vec3 pos = context.getTopScope()->getPosition();
-    glm::vec3 size = context.getTopScope()->getSize();
+    // glm::vec3 size_ = context.getTopScope()->getSize();
     std::cout << " -- Current scope -> POS: (" << pos.x << ", " << pos.y << ", " << pos.z << ") SIZE: (" << size.x << ", " << size.y << ", " << size.z << ") " << std::endl;
 }
 
