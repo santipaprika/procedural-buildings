@@ -34,6 +34,7 @@
 # IDE Stuff
 .idea/
 cmake-build-debug/
+build/
 
 # CMake Stuff
 CMakeLists.txt.user

@@ -64,39 +64,39 @@ Mesh Mesh::getCube()
 // TODO: Test fix indices
 Mesh Mesh::getCylinder()
 {
-    const int n = 20;
+    const int n = 40;
     float R = 0.5f;
     float pi = glm::pi<float>();
-    glm::vec3 translation(0.5f, 0.5f, 0.0f); // Translation that has to be added to make the origin be at the bottom left corner
+    glm::vec3 translation(0.5f, 0.0f, 0.5f); // Translation that has to be added to make the origin be at the bottom left corner
     Mesh cylinder;
 
     // Bottom vertices
     cylinder.vertices.push_back(glm::vec3(0.0f, 0.0f, 0.0f) + translation);
     for (int i = 1; i < n; ++i) {
         float t = float(i)/float(n);
-        glm::vec3 baseVertex = glm::vec3(R*glm::cos(2*pi*t), R*glm::sin(2*pi*t), 0.0f) + translation;
+        glm::vec3 baseVertex = glm::vec3(R*glm::cos(2*pi*t), 0.0f, R*glm::sin(2*pi*t)) + translation;
         cylinder.vertices.push_back(baseVertex);
-        cylinder.faces.push_back(glm::ivec3(i + 1, i, 0));
+        cylinder.faces.push_back(glm::ivec3(i + 1, 0, i));
     }
     cylinder.vertices.push_back(glm::vec3(R, 0.0f, 0.0f) + translation);
-    cylinder.faces.push_back(glm::ivec3(1, n, 0));
+    cylinder.faces.push_back(glm::ivec3(1, 0, n));
 
     int topOffset = n + 1;
 
     // Top Vertices
-    cylinder.vertices.push_back(glm::vec3(0.0f, 0.0f, 1.0f) + translation);
+    cylinder.vertices.push_back(glm::vec3(0.0f, 1.0f, 0.0f) + translation);
     for (int i = 1; i < n; ++i) {
         float t = float(i)/float(n);
-        glm::vec3 topVertex = glm::vec3(R*glm::cos(2*pi*t), R*glm::sin(2*pi*t), 1.0f) + translation;
+        glm::vec3 topVertex = glm::vec3(R*glm::cos(2*pi*t), 1.0f, R*glm::sin(2*pi*t)) + translation;
         cylinder.vertices.push_back(topVertex);
-        cylinder.faces.push_back(glm::ivec3(i + topOffset, i + 1 + topOffset, topOffset));
-        cylinder.faces.push_back(glm::ivec3(i + 1 + topOffset, i + topOffset, i));
-        cylinder.faces.push_back(glm::ivec3(i, i + 1, i + 1 + topOffset));
+        cylinder.faces.push_back(glm::ivec3(i + topOffset, topOffset, i + 1 + topOffset));
+        cylinder.faces.push_back(glm::ivec3(i + 1 + topOffset, i, i + topOffset));
+        cylinder.faces.push_back(glm::ivec3(i, i + 1 + topOffset, i + 1));
     }
-    cylinder.vertices.push_back(glm::vec3(R, 0.0f, 1.0f) + translation);
-    cylinder.faces.push_back(glm::ivec3(n + topOffset, 1 + topOffset, n));
-    cylinder.faces.push_back(glm::ivec3(1 + topOffset, n + topOffset, n));
-    cylinder.faces.push_back(glm::ivec3(n, 1, 1 + topOffset));
+    cylinder.vertices.push_back(glm::vec3(R, 1.0f, 0.0f) + translation);
+    cylinder.faces.push_back(glm::ivec3(n + topOffset, topOffset, 1 + topOffset));
+    cylinder.faces.push_back(glm::ivec3(1 + topOffset, n, n + topOffset));
+    cylinder.faces.push_back(glm::ivec3(n, 1 + topOffset, 1));
 
     return cylinder;
 }
