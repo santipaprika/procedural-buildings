@@ -61,6 +61,7 @@ glm::mat4 Scope::getTransform()
 {
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, position);
+    transform = glm::scale(transform, size);
     return transform;
 }
 

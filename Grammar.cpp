@@ -132,10 +132,10 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
         float size = cuts[i];
         glm::vec3 sizeVec((dim==1) ? size : -1, (dim==2) ? size : -1, (dim==3) ? size : -1);
         rule->right[0].push_back(new Push());
+        rule->right[0].push_back(new T(dimVector * -cumulativeCuts[i],dimVector * -cumulativeCuts[i]));
         rule->right[0].push_back(new S(sizeVec,sizeVec));
-        rule->right[0].push_back(new T(dimVector * cumulativeCuts[i],dimVector * cumulativeCuts[i]));
         lin >> shapeType;
-        if (shapeType == "S" || shapeType == "T") { // TO DO: If rightShapeType in *list of terminal shapes*
+        if (shapeType == "S" || shapeType == "T") {
             shape = parseShapeParameters(shapeType, lin);
         } else {
             shape = new NonTerminalShape(shapeType);

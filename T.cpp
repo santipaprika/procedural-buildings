@@ -26,9 +26,13 @@ void T::performAction(Context &context)
 {
     Scope &newScope = context.getTopScope();
     
-    float uniform = rand()/(float)RAND_MAX;
+    glm::vec3 uniform(rand()/(float)RAND_MAX, rand()/(float)RAND_MAX, rand()/(float)RAND_MAX);
     glm::vec3 position = uniform * (positionMax - positionMin) + positionMin;
     
+    if (position.x < 0) position.x = abs(position.x) * newScope.getSize().x;
+    if (position.y < 0) position.y = abs(position.x) * newScope.getSize().y;
+    if (position.z < 0) position.z = abs(position.x) * newScope.getSize().z;
+
     newScope.T(position);
 
     std::cout << "T (" << position.x << ", " << position.y << ", " << position.z << ") ";

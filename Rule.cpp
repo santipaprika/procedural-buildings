@@ -28,6 +28,6 @@ std::list<Shape*> Rule::expand(Shape *shape)
     for (int i = 0; i < expandedShapes.size(); ++i) {
         result.push_back(expandedShapes[i]); // TODO: This should perform a copy
     }
-    delete shape;
+    // delete shape;
     return result;
 }

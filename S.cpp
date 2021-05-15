@@ -26,13 +26,13 @@ void S::performAction(Context &context)
 {
     Scope &newScope = context.getTopScope();
 
-    float uniform = rand()/(float)RAND_MAX;
+    glm::vec3 uniform(rand()/(float)RAND_MAX, rand()/(float)RAND_MAX, rand()/(float)RAND_MAX);
     glm::vec3 size = uniform * (sizeMax - sizeMin) + sizeMin;
-    
+
     std::cout << "S (" << size.x << ", " << size.y << ", " << size.z << ") ";
-    if (size.x < 0) size.x = newScope.getSize().x;
-    if (size.y < 0) size.y = newScope.getSize().y;
-    if (size.z < 0) size.z = newScope.getSize().z;
+
+    size *= newScope.getSize();
+    size = glm::vec3(abs(size.x), abs(size.y), abs(size.z));
 
     newScope.S(size);
 
