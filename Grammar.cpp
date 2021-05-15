@@ -81,21 +81,21 @@ Shape* Grammar::initialShape() const
     return new NonTerminalShape("X");
 }
 
-Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& lin) const
+Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& lin)
 {
     // TO DO: Use switch instead of if?
     if (shapeType == "S") {
-        char parenthesis;
-        float s1, s2, s3;
-        lin >> parenthesis >> s1 >> s2 >> s3 >> parenthesis;
-        return new S(glm::vec3(s1,s2,s3)); 
+        float rangeValues[6];
+        parseRangeValues(lin, OUT rangeValues);
+        return new S(glm::vec3(rangeValues[0],rangeValues[1],rangeValues[2]), glm::vec3(rangeValues[3],rangeValues[4],rangeValues[5])); 
     }
 
     if (shapeType == "T") {
-        char parenthesis;
-        float s1, s2, s3;
-        lin >> parenthesis >> s1 >> s2 >> s3 >> parenthesis;
-        return new T(glm::vec3(s1,s2,s3)); 
+        float rangeValues[6];
+        parseRangeValues(lin, OUT rangeValues);
+        return new T(glm::vec3(rangeValues[0],rangeValues[1],rangeValues[2]), glm::vec3(rangeValues[3],rangeValues[4],rangeValues[5])); 
+ 
+
     }
 
     // ...
@@ -127,8 +127,8 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
         float size = cuts[i];
         glm::vec3 sizeVec((dim==1) ? size : -1, (dim==2) ? size : -1, (dim==3) ? size : -1);
         rule->right[0].push_back(new Push());
-        rule->right[0].push_back(new S(sizeVec));
-        rule->right[0].push_back(new T(dimVector * cumulativeCuts[i]));
+        rule->right[0].push_back(new S(sizeVec,sizeVec));
+        rule->right[0].push_back(new T(dimVector * cumulativeCuts[i],dimVector * cumulativeCuts[i]));
         lin >> shapeType;
         if (shapeType == "S" || shapeType == "T") { // TO DO: If rightShapeType in *list of terminal shapes*
             shape = parseShapeParameters(shapeType, lin);
@@ -140,5 +140,23 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
         rule->right[0].push_back(new Pop());
 
     }
+    lin >> parenthesis;
+}
+
+void Grammar::parseRangeValues(std::istringstream& lin, float (&rangeValues)[6]) 
+{
+    char parenthesis;
+    lin >> parenthesis; 
+    std::string s;
+    for (int i=0; i<3; i++) {
+        lin >> s;
+        if (s == "R") {
+            lin >> s >> rangeValues[i] >> rangeValues[i+3] >> s; 
+        } else {
+            rangeValues[i] = atof(s.c_str());
+            rangeValues[i+3] = rangeValues[i]; 
+        }
+    }
+
     lin >> parenthesis;
 }

@@ -6,9 +6,10 @@ S::S()
     
 }
 
-S::S(glm::vec3 size)
+S::S(glm::vec3 sizeMin, glm::vec3 sizeMax)
 {
-    this->size = size;
+    this->sizeMin = sizeMin;
+    this->sizeMax = sizeMax;
 }
 
 S::~S()
@@ -24,6 +25,10 @@ bool S::isTerminal()
 void S::performAction(Context &context)
 {
     Scope &newScope = context.getTopScope();
+
+    float uniform = rand()/(float)RAND_MAX;
+    glm::vec3 size = uniform * (sizeMax - sizeMin) + sizeMin;
+    
     std::cout << "S (" << size.x << ", " << size.y << ", " << size.z << ") ";
     if (size.x < 0) size.x = newScope.getSize().x;
     if (size.y < 0) size.y = newScope.getSize().y;

@@ -6,9 +6,10 @@ T::T()
     
 }
 
-T::T(glm::vec3 position)
+T::T(glm::vec3 positionMax, glm::vec3 positionMin)
 {
-    this->position = position;
+    this->positionMin = positionMin;
+    this->positionMax = positionMax;
 }
 
 T::~T()
@@ -24,6 +25,10 @@ bool T::isTerminal()
 void T::performAction(Context &context)
 {
     Scope &newScope = context.getTopScope();
+    
+    float uniform = rand()/(float)RAND_MAX;
+    glm::vec3 position = uniform * (positionMax - positionMin) + positionMin;
+    
     newScope.T(position);
 
     std::cout << "T (" << position.x << ", " << position.y << ", " << position.z << ") ";
