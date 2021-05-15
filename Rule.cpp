@@ -26,7 +26,7 @@ std::list<Shape*> Rule::expand(Shape *shape)
 
     std::vector<Shape*> expandedShapes = right[rightWinnerIdx];
     for (int i = 0; i < expandedShapes.size(); ++i) {
-        result.push_back(expandedShapes[i]);
+        result.push_back(expandedShapes[i]); // TODO: This should perform a copy
     }
     delete shape;
     return result;

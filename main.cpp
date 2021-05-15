@@ -1,6 +1,7 @@
 #include "Grammar.h"
 #include "Rule.h"
 #include "Shape.h"
+#include "PLYWriter.h"
 
 #include <iostream>
 #include <list>
@@ -11,6 +12,8 @@ void generateGeometry(const std::list<Shape*> &shapes)
     for (Shape *shape : shapes) {
         shape->performAction(context);
     }
+
+    PLYWriter::writeMesh( "test.ply", context.getScene());
 
     for (Shape *shape : shapes) {
         if (shape) delete shape;

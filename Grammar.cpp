@@ -4,6 +4,7 @@
 #include "T.h"
 #include "Pop.h"
 #include "Push.h"
+#include "I.h"
 
 #include <fstream>
 #include <iostream>
@@ -44,7 +45,7 @@ Grammar::Grammar(const std::string &filePath)
             }
 
             Shape* shape;
-            if (rightShapeType == "S" || rightShapeType == "T") { // TO DO: If rightShapeType in *list of terminal shapes*
+            if (rightShapeType == "S" || rightShapeType == "T" ||rightShapeType == "I") { // TO DO: If rightShapeType in *list of terminal shapes*
                 shape = parseShapeParameters(rightShapeType, lin);
             } else if (rightShapeType == "[") {
                 shape = new Push();
@@ -93,12 +94,16 @@ Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& 
     if (shapeType == "T") {
         float rangeValues[6];
         parseRangeValues(lin, OUT rangeValues);
-        return new T(glm::vec3(rangeValues[0],rangeValues[1],rangeValues[2]), glm::vec3(rangeValues[3],rangeValues[4],rangeValues[5])); 
- 
-
+        return new T(glm::vec3(rangeValues[0], rangeValues[1], rangeValues[2]),
+                     glm::vec3(rangeValues[3], rangeValues[4], rangeValues[5]));
     }
 
-    // ...
+    else if (shapeType == "I") {
+        char parenthesis;
+        std::string objId;
+        lin >> parenthesis >> objId >> parenthesis;
+        return new I(objId);
+    }
 }
 
 void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule) 

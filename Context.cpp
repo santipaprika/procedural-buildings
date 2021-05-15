@@ -12,11 +12,6 @@ Context::~Context()
 
 }
 
-Scope &Context::getTopScope()
-{
-    return scopes.top();
-}
-
 void Context::pushScope(const Scope &scope) 
 {
     scopes.push(scope);
@@ -25,4 +20,14 @@ void Context::pushScope(const Scope &scope)
 void Context::popScope() 
 {
     scopes.pop();
+}
+
+Scope &Context::getTopScope()
+{
+    return scopes.top();
+}
+
+Mesh &Context::getScene()
+{
+    return scene;
 }
