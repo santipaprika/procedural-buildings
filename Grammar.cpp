@@ -1,6 +1,7 @@
 #include "Grammar.h"
 #include "NonTerminalShape.h"
 #include "S.h"
+#include "T.h"
 
 #include <fstream>
 #include <iostream>
@@ -27,7 +28,7 @@ Grammar::Grammar(const std::string &filePath)
         rule->right = {{}};
         while (lin >> rightShapeType) {
             Shape* shape;
-            if (rightShapeType == "S") { // TO DO: If rightShapeType in *list of terminal shapes*
+            if (rightShapeType == "S" || rightShapeType == "T") { // TO DO: If rightShapeType in *list of terminal shapes*
                 shape = parseShapeParameters(rightShapeType, lin);
             } else if (rightShapeType == "Subdiv") {
                 parseSubdivisionParameters(lin, rule);
@@ -70,6 +71,13 @@ Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& 
         return new S(glm::vec3(s1,s2,s3)); 
     }
 
+    if (shapeType == "T") {
+        char parenthesis;
+        float s1, s2, s3;
+        lin >> parenthesis >> s1 >> s2 >> s3 >> parenthesis;
+        return new T(glm::vec3(s1,s2,s3)); 
+    }
+
     // ...
 }
 
@@ -90,15 +98,16 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
         cumulativeCuts.push_back((i>0) ? cumulativeCuts.back() + cuts[i-1] : 0); 
     }
 
+    glm::vec3 dimVector(dim==1, dim==2, dim==3);
     std::vector<Shape*> shapes;
     lin >> parenthesis >> parenthesis;
     std::string shapeType;
     Shape* shape;
     for (int i=0; i<n; i++) {
-        float scaleValue = cuts[i]; // TODO: Last element cas
-        glm::vec3 scale((dim==1) ? scaleValue : 1, (dim==2) ? scaleValue : 1, (dim==3) ? scaleValue : 1);
-        rule->right[0].push_back(new S(scale));
-        // rule->right[0].push_back(new T(dimVector * cumulativeCuts[i]));
+        float size = cuts[i]; // TODO: Last element cas
+        glm::vec3 sizeVec((dim==1) ? size : 1, (dim==2) ? size : 1, (dim==3) ? size : 1);
+        rule->right[0].push_back(new S(sizeVec));
+        rule->right[0].push_back(new T(dimVector * cumulativeCuts[i]));
         lin >> shapeType;
         if (shapeType == "S") { // TO DO: If rightShapeType in *list of terminal shapes*
             shape = parseShapeParameters(shapeType, lin);
