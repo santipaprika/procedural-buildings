@@ -1,17 +1,13 @@
 #pragma once
-#include "Scope.h"
 
-enum ShapeLabel {FACADE, WINDOW, FLOOR, ROOF, LEDGE};
-using Label = int;
+#include "Context.h"
+
+#include <string>
 
 class Shape {
-    private:
-        Label label;
-        Scope* scope;
-    public:
-        Shape();
-        Shape(Label label, Scope* scope);
-
-        ~Shape();
+public:
+    virtual ~Shape() = default;
+    virtual bool isTerminal() = 0;
+    virtual void performAction(Context &context) = 0;
+    virtual std::string getShapeType() = 0;
 };
-

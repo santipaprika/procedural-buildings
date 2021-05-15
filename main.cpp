@@ -1,13 +1,45 @@
+#include "Grammar.h"
+#include "Rule.h"
+#include "Shape.h"
+
 #include <iostream>
-#include "glm/glm.hpp"
+#include <list>
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include "glm/gtx/string_cast.hpp"
+void generateGeometry(const std::list<Shape*> &shapes)
+{
+    Context context;
+    for (Shape *shape : shapes) {
+        shape->performAction(context);
+        delete shape;
+    }
+}
 
-
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    glm::vec3 a(0.f);
-    std::cout << glm::to_string(a) << std::endl;
-    return 0;
+// TODO:    Improve this algorithm by not traversing whole list every time
+//          just detect shapes that are non-terminal when expanding and iterate over those in the next iteration
+int main(){
+    Grammar grammar("../test.grammar");
+    std::list<Shape*> shapes;
+    shapes.push_back(grammar.initialShape());
+    bool allTerminal = false;
+    while (!allTerminal) {
+        std::list<Shape*> nextShapes;
+        allTerminal = true;
+        while(!shapes.empty()) {
+            Shape *shape = shapes.front();
+            shapes.pop_front();
+            if(!shape->isTerminal()) {
+                Rule *rule = grammar.findRule(shape);
+                if (!rule) {
+                    std::cerr << "E: No rule found for non-terminal shape, can't continue expanding." << std::endl;
+                    std::exit(-1);
+                }
+                std::list<Shape*> expandedShapes = rule->expand(shape);
+                nextShapes.splice(nextShapes.end(), expandedShapes);
+                allTerminal = false;
+            }
+            else nextShapes.push_back(shape);
+        }
+        shapes = std::move(nextShapes);
+    }
+    generateGeometry(shapes);
 }
