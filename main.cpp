@@ -20,6 +20,8 @@ void generateGeometry(const std::list<Shape*> &shapes)
 // TODO:    Improve this algorithm by not traversing whole list every time
 //          just detect shapes that are non-terminal when expanding and iterate over those in the next iteration
 int main(){
+    srand(time(NULL));
+
     Grammar grammar("../test.grammar");
     std::list<Shape*> shapes;
     shapes.push_back(grammar.initialShape());

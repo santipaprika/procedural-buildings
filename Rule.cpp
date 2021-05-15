@@ -5,18 +5,26 @@
 
 Rule::Rule(bool test)
 {
-    // if (test) {
-    //     ShapeInstanceInfo right_ = {"S"};
-    //     left = {""};
-    //     right = {{right_}};
-    // }
+
 }
 
 std::list<Shape*> Rule::expand(Shape *shape)
 {
     int alternatives = right.size();
     std::list<Shape*> result;
-    std::vector<Shape*> expandedShapes = right[0]; // TODO: This should choose one of the alternatives randomly
+
+    int rightWinnerIdx = 0;
+    float uniform = rand()/(float)RAND_MAX;
+    float cumulativeProb = 0;
+    for (int i=0; i<rightProbs.size(); i++) {
+        cumulativeProb += rightProbs[i];
+        if (cumulativeProb > uniform) {
+            rightWinnerIdx = i;
+            break;
+        } 
+    }
+
+    std::vector<Shape*> expandedShapes = right[rightWinnerIdx];
     for (int i = 0; i < expandedShapes.size(); ++i) {
         result.push_back(expandedShapes[i]);
     }

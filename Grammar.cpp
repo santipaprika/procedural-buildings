@@ -28,7 +28,21 @@ Grammar::Grammar(const std::string &filePath)
         Rule *rule = new Rule(false);
         rule->left = leftShapeType;
         rule->right = {{}};
+        int rightIdx = 0;
         while (lin >> rightShapeType) {
+
+            if (rightShapeType == ":") {
+                float prob;
+                std::string sep;
+                lin >> prob >> sep;
+                rule->rightProbs.push_back(prob); 
+                rightIdx++;
+                if (sep != "")
+                    rule->right.push_back({});
+
+                continue;
+            }
+
             Shape* shape;
             if (rightShapeType == "S" || rightShapeType == "T") { // TO DO: If rightShapeType in *list of terminal shapes*
                 shape = parseShapeParameters(rightShapeType, lin);
@@ -43,7 +57,7 @@ Grammar::Grammar(const std::string &filePath)
                 shape = new NonTerminalShape(rightShapeType);
             }
 
-            rule->right[0].push_back(shape);
+            rule->right[rightIdx].push_back(shape);
         }
         substitutionRules[leftShapeType] = rule;
     }

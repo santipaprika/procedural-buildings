@@ -15,4 +15,5 @@ public:
     // TODO: This could be a string?
     std::string left;
     std::vector<std::vector<Shape*>> right;
+    std::vector<float> rightProbs;
 };
