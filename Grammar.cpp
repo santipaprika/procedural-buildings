@@ -2,6 +2,8 @@
 #include "NonTerminalShape.h"
 #include "S.h"
 #include "T.h"
+#include "Pop.h"
+#include "Push.h"
 
 #include <fstream>
 #include <iostream>
@@ -30,6 +32,10 @@ Grammar::Grammar(const std::string &filePath)
             Shape* shape;
             if (rightShapeType == "S" || rightShapeType == "T") { // TO DO: If rightShapeType in *list of terminal shapes*
                 shape = parseShapeParameters(rightShapeType, lin);
+            } else if (rightShapeType == "[") {
+                shape = new Push();
+            } else if (rightShapeType == "]") {
+                shape = new Pop();
             } else if (rightShapeType == "Subdiv") {
                 parseSubdivisionParameters(lin, rule);
                 continue;
@@ -104,18 +110,21 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
     std::string shapeType;
     Shape* shape;
     for (int i=0; i<n; i++) {
-        float size = cuts[i]; // TODO: Last element cas
+        float size = cuts[i];
         glm::vec3 sizeVec((dim==1) ? size : -1, (dim==2) ? size : -1, (dim==3) ? size : -1);
+        rule->right[0].push_back(new Push());
         rule->right[0].push_back(new S(sizeVec));
         rule->right[0].push_back(new T(dimVector * cumulativeCuts[i]));
         lin >> shapeType;
-        if (shapeType == "S") { // TO DO: If rightShapeType in *list of terminal shapes*
+        if (shapeType == "S" || shapeType == "T") { // TO DO: If rightShapeType in *list of terminal shapes*
             shape = parseShapeParameters(shapeType, lin);
         } else {
             shape = new NonTerminalShape(shapeType);
         }
         
         rule->right[0].push_back(shape);
+        rule->right[0].push_back(new Pop());
+
     }
     lin >> parenthesis;
 }

@@ -23,13 +23,12 @@ bool T::isTerminal()
 
 void T::performAction(Context &context)
 {
-    Scope* newScope = new Scope((*context.getTopScope()));
-    newScope->T(position);
-    context.pushScope(newScope);
+    Scope &newScope = context.getTopScope();
+    newScope.T(position);
 
     std::cout << "T (" << position.x << ", " << position.y << ", " << position.z << ") ";
-    glm::vec3 pos = context.getTopScope()->getPosition();
-    glm::vec3 size = context.getTopScope()->getSize();
+    glm::vec3 pos = context.getTopScope().getPosition();
+    glm::vec3 size = context.getTopScope().getSize();
     std::cout << " -- Current scope -> POS: (" << pos.x << ", " << pos.y << ", " << pos.z << ") SIZE: (" << size.x << ", " << size.y << ", " << size.z << ") " << std::endl;
 }
 
