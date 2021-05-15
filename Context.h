@@ -9,8 +9,9 @@ class Context
 public:
     Context();
     ~Context();
-    void S();
+    Scope* getTopScope() const;
+    void pushScope(Scope* scope);
 private:
-    std::stack<Scope> scopes;
+    std::stack<Scope*> scopes;
     // TODO: Store a triangle mesh where objects are instantiated
 };

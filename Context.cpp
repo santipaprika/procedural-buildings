@@ -4,7 +4,7 @@
 
 Context::Context()
 {
-    scopes.emplace();
+    scopes.emplace(new Scope());
 }
 
 Context::~Context()
@@ -12,7 +12,12 @@ Context::~Context()
 
 }
 
-void Context::S()
+Scope* Context::getTopScope() const
 {
-    std::cout << "S" << std::endl;
+    return scopes.top();
+}
+
+void Context::pushScope(Scope* scope) 
+{
+    scopes.push(scope);
 }

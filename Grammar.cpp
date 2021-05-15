@@ -59,7 +59,7 @@ Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& 
     // TO DO: Use switch instead of if?
     if (shapeType == "S") {
         char parenthesis;
-        int s1, s2, s3;
+        float s1, s2, s3;
         lin >> parenthesis >> s1 >> s2 >> s3 >> parenthesis;
         return new S(glm::vec3(s1,s2,s3)); 
     }

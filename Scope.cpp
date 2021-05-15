@@ -25,7 +25,7 @@ void Scope::T(const glm::vec3 &translation)
 
 void Scope::S(const glm::vec3 &size_)
 {
-    size = size_;
+    size *= size_;
 }
 
 // TODO: Fix these rotations (make them local space not global)
@@ -55,4 +55,14 @@ void Scope::Rz(float angle)
     glm::mat3 rotation(glm::vec3(c, s, 0.0f), glm::vec3(-s, c, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     x = rotation * x;
     y = rotation * y;
+}
+
+glm::vec3 Scope::getPosition() const
+{
+    return position;
+}
+
+glm::vec3 Scope::getSize() const
+{
+    return size;
 }

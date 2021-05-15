@@ -23,8 +23,14 @@ bool S::isTerminal()
 
 void S::performAction(Context &context)
 {
-    context.S();
-    std::cout << "(" << scale.x << ", " << scale.y << ", " << scale.z << ") " << std::endl;
+    Scope* newScope = new Scope((*context.getTopScope()));
+    newScope->S(scale);
+    context.pushScope(newScope);
+
+    // context.S();
+    std::cout << "S (" << scale.x << ", " << scale.y << ", " << scale.z << ") ";
+    glm::vec3 size = context.getTopScope()->getSize();
+    std::cout << " -- Current scope -> POS: (" << size.x << ", " << size.y << ", " << size.z << ") SIZE: (" << size.x << ", " << size.y << ", " << size.z << ") " << std::endl;
 }
 
 std::string S::getShapeType()
