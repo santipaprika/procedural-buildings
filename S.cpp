@@ -24,13 +24,17 @@ bool S::isTerminal()
 void S::performAction(Context &context)
 {
     Scope* newScope = new Scope((*context.getTopScope()));
+    std::cout << "S (" << size.x << ", " << size.y << ", " << size.z << ") ";
+    if (size.x < 0) size.x = newScope->getSize().x;
+    if (size.y < 0) size.y = newScope->getSize().y;
+    if (size.z < 0) size.z = newScope->getSize().z;
+
     newScope->S(size);
     context.pushScope(newScope);
 
-    std::cout << "S (" << size.x << ", " << size.y << ", " << size.z << ") ";
     glm::vec3 pos = context.getTopScope()->getPosition();
-    // glm::vec3 size_ = context.getTopScope()->getSize();
-    std::cout << " -- Current scope -> POS: (" << pos.x << ", " << pos.y << ", " << pos.z << ") SIZE: (" << size.x << ", " << size.y << ", " << size.z << ") " << std::endl;
+    glm::vec3 contextSize = context.getTopScope()->getSize();
+    std::cout << " -- Current scope -> POS: (" << pos.x << ", " << pos.y << ", " << pos.z << ") SIZE: (" << contextSize.x << ", " << contextSize.y << ", " << contextSize.z << ") " << std::endl;
 }
 
 std::string S::getShapeType()

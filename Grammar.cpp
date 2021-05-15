@@ -105,7 +105,7 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
     Shape* shape;
     for (int i=0; i<n; i++) {
         float size = cuts[i]; // TODO: Last element cas
-        glm::vec3 sizeVec((dim==1) ? size : 1, (dim==2) ? size : 1, (dim==3) ? size : 1);
+        glm::vec3 sizeVec((dim==1) ? size : -1, (dim==2) ? size : -1, (dim==3) ? size : -1);
         rule->right[0].push_back(new S(sizeVec));
         rule->right[0].push_back(new T(dimVector * cumulativeCuts[i]));
         lin >> shapeType;
