@@ -17,7 +17,7 @@ public:
     static Rule* findRule(Shape *shape);
     Shape* initialShape() const;
     Shape* parseShapeParameters(std::string shapeType, std::istringstream& lin);
-    void parseSubdivisionParameters(std::istringstream& lin, Rule* rule);
+    void parseSubdivisionParameters(std::istringstream& lin, Rule* rule, int rightIdx);
 
 private:
     using ShapeInstanceType = std::string;

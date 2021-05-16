@@ -8,7 +8,7 @@ class T : public Shape
 {
 public:
     T();
-    T(glm::vec3 positionMin, glm::vec3 positionMax);
+    T(glm::vec3 positionMin, glm::vec3 positionMax, bool relative, bool subdividing=false);
     ~T();
     bool isTerminal() override;
     void performAction(Context &context) override;
@@ -16,4 +16,6 @@ public:
 private:
     glm::vec3 positionMax;
     glm::vec3 positionMin;
+    bool relative;
+    bool subdividing;
 };

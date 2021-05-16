@@ -21,7 +21,8 @@ void generateGeometry(const std::list<Shape*> &shapes)
 int main(){
     srand(time(NULL));
 
-    Grammar grammar("../test.grammar");
+    // Grammar grammar("../test.grammar");
+    Grammar grammar("../../procedural-buildings/test.grammar");
     std::list<Shape*> shapes;
     shapes.push_back(grammar.initialShape());
     bool allTerminal = false;

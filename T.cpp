@@ -6,10 +6,13 @@ T::T()
     
 }
 
-T::T(glm::vec3 positionMax, glm::vec3 positionMin)
+T::T(glm::vec3 positionMax, glm::vec3 positionMin, bool relative, bool subdividing)
 {
     this->positionMin = positionMin;
     this->positionMax = positionMax;
+
+    this->relative = relative;
+    this->subdividing = subdividing;
 }
 
 T::~T()
@@ -29,9 +32,17 @@ void T::performAction(Context &context)
     glm::vec3 uniform(rand()/(float)RAND_MAX, rand()/(float)RAND_MAX, rand()/(float)RAND_MAX);
     glm::vec3 position = uniform * (positionMax - positionMin) + positionMin;
     
-    if (position.x < 0) position.x = abs(position.x) * newScope.getSize().x;
-    if (position.y < 0) position.y = abs(position.x) * newScope.getSize().y;
-    if (position.z < 0) position.z = abs(position.x) * newScope.getSize().z;
+    if (relative) {
+        position.x = position.x * newScope.getSize().x;
+        position.y = position.y * newScope.getSize().y;
+        position.z = position.z * newScope.getSize().z;
+    }
+
+    if (subdividing) {
+        if (position.x < 0) position.x = abs(position.x) * newScope.getSize().x;
+        if (position.y < 0) position.y = abs(position.y) * newScope.getSize().y;
+        if (position.z < 0) position.z = abs(position.z) * newScope.getSize().z;
+    }
 
     newScope.T(position);
 

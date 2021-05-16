@@ -46,14 +46,14 @@ Grammar::Grammar(const std::string &filePath)
             }
 
             Shape* shape;
-            if (rightShapeType == "S" || rightShapeType == "T" || rightShapeType == "I" || rightShapeType == "Rx" || rightShapeType == "Ry" || rightShapeType == "Rz") { // TO DO: If rightShapeType in *list of terminal shapes*
+            if (rightShapeType == "S" || rightShapeType == "T" || rightShapeType == "Tr" || rightShapeType == "I" || rightShapeType == "Rx" || rightShapeType == "Ry" || rightShapeType == "Rz") { // TO DO: If rightShapeType in *list of terminal shapes*
                 shape = parseShapeParameters(rightShapeType, lin);
             } else if (rightShapeType == "[") {
                 shape = new Push();
             } else if (rightShapeType == "]") {
                 shape = new Pop();
             } else if (rightShapeType == "Subdiv") {
-                parseSubdivisionParameters(lin, rule);
+                parseSubdivisionParameters(lin, rule, rightIdx);
                 continue;
             } else {
                 shape = new NonTerminalShape(rightShapeType);
@@ -91,11 +91,12 @@ Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& 
         return new S(glm::vec3(rangeValues[0],rangeValues[1],rangeValues[2]), glm::vec3(rangeValues[3],rangeValues[4],rangeValues[5])); 
     }
 
-    else if (shapeType == "T") {
+    else if (shapeType == "T" || shapeType == "Tr") {
+        bool relative = (shapeType == "Tr"); 
         float rangeValues[6];
         parseRangeValues(lin, OUT rangeValues);
         return new T(glm::vec3(rangeValues[0], rangeValues[1], rangeValues[2]),
-                     glm::vec3(rangeValues[3], rangeValues[4], rangeValues[5]));
+                     glm::vec3(rangeValues[3], rangeValues[4], rangeValues[5]), relative);
     }
 
     else if (shapeType == "Rx" || shapeType == "Ry"  || shapeType == "Rz") {
@@ -120,7 +121,7 @@ Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& 
     }
 }
 
-void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule) 
+void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule, int rightIdx) 
 {
     char parenthesis;
     int dim;
@@ -145,18 +146,18 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
     for (int i=0; i<n; i++) {
         float size = cuts[i];
         glm::vec3 sizeVec((dim==1) ? size : -1, (dim==2) ? size : -1, (dim==3) ? size : -1);
-        rule->right[0].push_back(new Push());
-        rule->right[0].push_back(new T(dimVector * -cumulativeCuts[i],dimVector * -cumulativeCuts[i]));
-        rule->right[0].push_back(new S(sizeVec,sizeVec));
+        rule->right[rightIdx].push_back(new Push());
+        rule->right[rightIdx].push_back(new T(dimVector * -cumulativeCuts[i],dimVector * -cumulativeCuts[i], false, true));
+        rule->right[rightIdx].push_back(new S(sizeVec,sizeVec));
         lin >> shapeType;
-        if (shapeType == "S" || shapeType == "T") {
+        if (shapeType == "S" || shapeType == "T" || shapeType == "Tr") {
             shape = parseShapeParameters(shapeType, lin);
         } else {
             shape = new NonTerminalShape(shapeType);
         }
         
-        rule->right[0].push_back(shape);
-        rule->right[0].push_back(new Pop());
+        rule->right[rightIdx].push_back(shape);
+        rule->right[rightIdx].push_back(new Pop());
 
     }
     lin >> parenthesis;
@@ -169,7 +170,7 @@ void Grammar::parseRangeValue(std::istringstream &lin, float (&rangeValue)[2])
     std::string s;
     lin >> s;
     if (s == "R") {
-        lin >> rangeValue[0] >> rangeValue[1];
+        lin >> parenthesis >> rangeValue[0] >> rangeValue[1] >> parenthesis;
     }
     else {
         rangeValue[0] = atof(s.c_str());
@@ -186,7 +187,7 @@ void Grammar::parseRangeValues(std::istringstream& lin, float (&rangeValues)[6])
     for (int i=0; i<3; i++) {
         lin >> s;
         if (s == "R") {
-            lin >> s >> rangeValues[i] >> rangeValues[i+3] >> s; 
+            lin >> parenthesis >> rangeValues[i] >> rangeValues[i+3] >> parenthesis; 
         } else {
             rangeValues[i] = atof(s.c_str());
             rangeValues[i+3] = rangeValues[i]; 
