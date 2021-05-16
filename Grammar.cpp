@@ -1,5 +1,6 @@
 #include "Grammar.h"
 #include "NonTerminalShape.h"
+#include "R.h"
 #include "S.h"
 #include "T.h"
 #include "Pop.h"
@@ -45,7 +46,7 @@ Grammar::Grammar(const std::string &filePath)
             }
 
             Shape* shape;
-            if (rightShapeType == "S" || rightShapeType == "T" ||rightShapeType == "I") { // TO DO: If rightShapeType in *list of terminal shapes*
+            if (rightShapeType == "S" || rightShapeType == "T" || rightShapeType == "I" || rightShapeType == "Rx" || rightShapeType == "Ry" || rightShapeType == "Rz") { // TO DO: If rightShapeType in *list of terminal shapes*
                 shape = parseShapeParameters(rightShapeType, lin);
             } else if (rightShapeType == "[") {
                 shape = new Push();
@@ -84,18 +85,31 @@ Shape* Grammar::initialShape() const
 
 Shape* Grammar::parseShapeParameters(std::string shapeType, std::istringstream& lin)
 {
-    // TO DO: Use switch instead of if?
     if (shapeType == "S") {
         float rangeValues[6];
         parseRangeValues(lin, OUT rangeValues);
         return new S(glm::vec3(rangeValues[0],rangeValues[1],rangeValues[2]), glm::vec3(rangeValues[3],rangeValues[4],rangeValues[5])); 
     }
 
-    if (shapeType == "T") {
+    else if (shapeType == "T") {
         float rangeValues[6];
         parseRangeValues(lin, OUT rangeValues);
         return new T(glm::vec3(rangeValues[0], rangeValues[1], rangeValues[2]),
                      glm::vec3(rangeValues[3], rangeValues[4], rangeValues[5]));
+    }
+
+    else if (shapeType == "Rx" || shapeType == "Ry"  || shapeType == "Rz") {
+        float rangeValue[2];
+        parseRangeValue(lin, OUT rangeValue);
+        if (shapeType == "Rx") {
+            return new R(1, rangeValue[0], rangeValue[1]);
+        }
+        else if (shapeType == "Ry") {
+            return new R(2, rangeValue[0], rangeValue[1]);
+        }
+        else if (shapeType == "Rz") {
+            return new R(3, rangeValue[0], rangeValue[1]);
+        }
     }
 
     else if (shapeType == "I") {
@@ -144,6 +158,22 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule)
         rule->right[0].push_back(shape);
         rule->right[0].push_back(new Pop());
 
+    }
+    lin >> parenthesis;
+}
+
+void Grammar::parseRangeValue(std::istringstream &lin, float (&rangeValue)[2])
+{
+    char parenthesis;
+    lin >> parenthesis;
+    std::string s;
+    lin >> s;
+    if (s == "R") {
+        lin >> rangeValue[0] >> rangeValue[1];
+    }
+    else {
+        rangeValue[0] = atof(s.c_str());
+        rangeValue[1] = rangeValue[0];
     }
     lin >> parenthesis;
 }

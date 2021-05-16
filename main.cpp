@@ -14,10 +14,6 @@ void generateGeometry(const std::list<Shape*> &shapes)
     }
 
     PLYWriter::writeMesh( "test.ply", context.getScene());
-
-    for (Shape *shape : shapes) {
-        if (shape) delete shape;
-    }
 }
 
 // TODO:    Improve this algorithm by not traversing whole list every time

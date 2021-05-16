@@ -22,5 +22,6 @@ public:
 private:
     using ShapeInstanceType = std::string;
     static std::unordered_map<ShapeInstanceType, Rule*> substitutionRules;
+    void parseRangeValue(std::istringstream &lin, float (&rangeValues)[2]);
     void parseRangeValues(std::istringstream& lin, float (&rangeValues)[6]);
 };
