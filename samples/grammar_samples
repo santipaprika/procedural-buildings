@@ -1,0 +1,64 @@
+// 1. Instantiate
+X -> I ( Cube )
+
+// 2. Translate / Scale / Rotate
+X -> I ( Cylinder ) T ( 5 0 0 ) I ( Cylinder )
+
+// 3. Rules
+X -> Column T ( 5 0 0 ) Column
+Column -> I ( Cylinder )
+
+// 4. Push-Pop
+X -> [ Column T ( 5 0 0 ) Column ] T ( -5 0 0 ) Column
+Column -> I ( Cylinder )
+
+// 5. Random parameters
+X -> [ Column T ( 2 0 0 ) Column ] T ( -2 0 0 ) Column
+Column -> S ( 1 R ( 0.5 1.5 ) 1 ) I ( Cylinder )
+
+// 6. Subdivide
+X -> Subdiv ( 1 3 0.6 0.2 0.2 ) ( Column Column Column ) 
+Column -> S ( 1 R ( 0.5 1.5 ) 1 ) I ( Cylinder )
+
+// 7. Rules probability
+X -> Subdiv ( 1 3 0.6 0.2 0.2 ) ( Column Column Column ) : 0.5 | Column : 0.5
+Column -> S ( 1 R ( 0.5 1.5 ) 1 ) I ( Cylinder )
+
+// 8. Building with sidewings
+X -> [ Building ] [ T ( 5 0 0 ) Building ] [ T ( 10 0 0 ) Cylinder ]
+Building -> S ( 2 5 2 ) I ( Cube ) Sidewings
+Sidewings ->  T ( 0 0 2 ) Subdiv ( 1 3 0.2 0.4 0.4 ) ( Sidewing Sidewing Sidewing )
+Sidewing -> S ( 1 0.5 0.3 ) I ( Cube ) : 0.4 | Empty : 0.6
+Cylinder -> S ( 2 5 2 ) I ( Cylinder )
+Empty -> 
+
+
+
+// 2 BLOCKS
+X -> [ Block ] [ T ( 10 0 0 ) Block ]
+Block -> [ Tr ( -2 0 0 ) Building ] [ Tr ( 2 0 0 ) Building ] [ Tr ( 0 0 2 ) Building ] [ Tr ( 0 0 -2 )  Building ] [ Tr ( -2 0 -2 ) Building ] [ Tr ( 2 0 2 ) Building ] [ Tr ( -2 0 2 ) Building ] [ Tr ( 2 0 -2 ) Building ]
+Building -> S ( 2 R ( 9 10 ) 2 ) I ( Cube ) Sidewings
+Sidewings ->  T ( 0 0 2 ) Subdiv ( 1 3 0.2 0.4 0.4 ) ( Sidewing Sidewing Sidewing )
+Sidewing -> S ( 1 R ( 0.2 0.5 ) 0.3 ) I ( Cube ) : 0.4 | Empty : 0.6
+Empty -> 
+
+
+// BLOCKS WITH WINDOWS
+X -> [ Block ] : 0.2 | [ Block ] [ T ( 10 0 0 ) X ] : 0.8
+Block -> [ Tr ( -2 0 0 ) Building ] [ Tr ( 2 0 0 ) Building ] [ Tr ( 0 0 2 ) Building ] [ Tr ( 0 0 -2 )  Building ] [ Tr ( -2 0 -2 ) Building ] [ Tr ( 2 0 2 ) Building ] [ Tr ( -2 0 2 ) Building ] [ Tr ( 2 0 -2 ) Building ]
+Building -> S ( 2 R ( 9 10 ) 2 ) I ( Cube ) [ WindowsX ] [ Sidewings ]
+
+Sidewings ->  T ( 0 0 2 ) Subdiv ( 1 3 0.2 0.4 0.4 ) ( Sidewing Sidewing Sidewing )
+Sidewing -> S ( 1 R ( 0.2 0.5 ) 0.3 ) I ( Cube ) : 0.4 | Empty : 0.6
+
+WindowsX -> Tr ( 0.94 0.2 0 ) Subdiv ( 2 4 0.25 0.25 0.25 0.25 ) ( Window Window Window Window )
+Window -> Tr ( 0 0 0.5 ) S ( 0.1 0.1 0.1 ) I ( Cube )
+
+Empty -> 
+
+
+// GRID
+X -> S ( 10 1 10 ) Grid
+Grid -> Subdiv ( 1 2 0.5 0.5 ) ( Grid Grid ) : 0.25 | Subdiv ( 3 2 0.5 0.5 ) ( Grid Grid ) : 0.20 | Block : 0.55
+Block -> S ( 0.9 R ( 0.9 1 ) 0.9 ) Ry ( R ( 0.1 0.2 ) ) I ( Cube ) : 0.7 | Empty : 0.3
+Empty ->
