@@ -43,19 +43,6 @@ Sidewing -> S ( 1 R ( 0.2 0.5 ) 0.3 ) I ( Cube ) : 0.4 | Empty : 0.6
 Empty -> 
 
 
-// BLOCKS WITH WINDOWS (OLD VERSION)
-X -> [ Block ] : 0.2 | [ Block ] [ T ( 10 0 0 ) X ] : 0.8
-Block -> [ Tr ( -2 0 0 ) Building ] [ Tr ( 2 0 0 ) Building ] [ Tr ( 0 0 2 ) Building ] [ Tr ( 0 0 -2 )  Building ] [ Tr ( -2 0 -2 ) Building ] [ Tr ( 2 0 2 ) Building ] [ Tr ( -2 0 2 ) Building ] [ Tr ( 2 0 -2 ) Building ]
-Building -> S ( 2 R ( 9 10 ) 2 ) I ( Cube ) [ WindowsX ] [ Sidewings ]
-
-Sidewings ->  Tr ( 0 0 1 ) Subdiv ( 1 3 0.2 0.4 0.4 ) ( Sidewing Sidewing Sidewing )
-Sidewing -> S ( 1 R ( 0.2 0.5 ) 0.3 ) I ( Cube ) : 0.4 | Empty : 0.6
-
-WindowsX -> Tr ( 0 0.2 0.94 ) Subdiv ( 2 4 0.25 0.25 0.25 0.25 ) ( Window Window Window Window )
-Window -> Tr ( 0.5 0 0 ) S ( 0.1 0.1 0.1 ) I ( Cube )
-
-Empty -> 
-
 // BLOCKS WITH WINDOWS (NEW VERSION)
 X -> [ Block ] : 0.2 | [ Block ] [ T ( 10 0 0 ) X ] : 0.8
 Block ->  [ BuildingOffset ] [ CornerOffset ] [ Ry ( 90 ) BuildingOffset ] [ Ry ( 90 ) CornerOffset ] [ Ry ( 180 ) BuildingOffset ] [ Ry ( 180 ) CornerOffset ] [ Ry ( 270 ) BuildingOffset ] [ Ry ( 270 ) CornerOffset ]
@@ -68,6 +55,32 @@ Sidewing -> Tr ( 0.5 0 0 ) S ( 1 R ( 0.2 0.5 ) 0.3 ) I ( Cube ) : 0.4 | Empty : 
 
 WindowsX -> Tr ( 0 0.2 0.5 ) Subdiv ( 2 4 0.25 0.25 0.25 0.25 ) ( Window Window Window Window )
 Window -> S ( 0.1 0.1 0.1 ) I ( Cube )
+
+Empty -> 
+
+
+// CITY
+X -> [ Floor ] T ( -50 0 -50 ) City
+City -> Street City : 0.8 | Empty : 0.2
+Street -> [ StreetBlocks ] Tr ( 0 0 R ( 6 13 ) )
+Floor -> S ( 120 0.1 120 ) I ( Cube )
+StreetBlocks -> [ AddBuilding ] : 0.3 | [ AddBuilding ] [ Tr ( R ( 6 12 ) 0 0 ) StreetBlocks ] : 0.7
+
+AddBuilding -> Block : 0.9 | Dome : 0.1 
+Block ->  S ( 1 R ( 0.5 1.0 ) 1 ) [ BuildingOffset ] [ CornerOffset ] [ Ry ( 90 ) BuildingOffset ] [ Ry ( 90 ) CornerOffset ] [ Ry ( 180 ) BuildingOffset ] [ Ry ( 180 ) CornerOffset ] [ Ry ( 270 ) BuildingOffset ] [ Ry ( 270 ) CornerOffset ]
+CornerOffset -> [ Tr ( -2 0 0 ) BuildingOffset ] [ Tr ( 2 0 0 ) BuildingOffset ]
+BuildingOffset -> Tr ( 0 0 2 ) Building
+Building -> S ( 2 R ( 9 10 ) 2 ) I ( Cube ) [ WindowsX ] [ Sidewings ]
+
+Sidewings ->  Tr ( 0 0 0.5 ) Subdiv ( 1 3 0.2 0.4 0.4 ) ( Sidewing Sidewing Sidewing )
+Sidewing -> Tr ( 0.5 0 0 ) S ( 1 R ( 0.2 0.5 ) 0.3 ) I ( Cube ) : 0.4 | Empty : 0.6
+
+WindowsX -> Tr ( 0 0.2 0.5 ) Subdiv ( 2 4 0.25 0.25 0.25 0.25 ) ( Window Window Window Window )
+Window -> S ( 0.1 0.1 0.1 ) I ( Cube )
+
+Dome -> [ S ( R ( 5 6 ) R ( 30 35 ) R ( 5 6 ) ) I ( Sphere ) DomeDoors ]
+DomeDoors -> [ Tr ( 0.5 0 0 ) Door ] [ Tr ( -0.5 0 0 ) Door ] [ Tr ( 0 0 0.5 ) Door ] [ Tr ( 0 0 -0.5 ) Door ]
+Door -> [ S ( 0.07 0.03 0.07 ) I ( Cube ) ]
 
 Empty -> 
 
