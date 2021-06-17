@@ -147,7 +147,9 @@ void Grammar::parseSubdivisionParameters(std::istringstream& lin, Rule* rule, in
         float size = cuts[i];
         glm::vec3 sizeVec((dim==1) ? size : -1, (dim==2) ? size : -1, (dim==3) ? size : -1);
         rule->right[rightIdx].push_back(new Push());
-        rule->right[rightIdx].push_back(new T(dimVector * -cumulativeCuts[i],dimVector * -cumulativeCuts[i], false, true));
+        if (dim!=2)
+            rule->right[rightIdx].push_back(new T(dimVector * (-0.5f), dimVector * (-0.5f), true));
+        rule->right[rightIdx].push_back(new T(dimVector * cumulativeCuts[i],dimVector * cumulativeCuts[i], true, false));
         rule->right[rightIdx].push_back(new S(sizeVec,sizeVec));
         lin >> shapeType;
         if (shapeType == "S" || shapeType == "T" || shapeType == "Tr") {

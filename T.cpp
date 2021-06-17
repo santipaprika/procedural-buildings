@@ -33,15 +33,18 @@ void T::performAction(Context &context)
     glm::vec3 position = uniform * (positionMax - positionMin) + positionMin;
     
     if (relative) {
-        position.x = position.x * newScope.getSize().x;
-        position.y = position.y * newScope.getSize().y;
-        position.z = position.z * newScope.getSize().z;
+        glm::vec4 positionHomogenous(position.x, position.y, position.z, 0.f);
+        positionHomogenous = newScope.getTransform() * positionHomogenous;
+        position = glm::vec3(positionHomogenous.x, positionHomogenous.y, positionHomogenous.z);
     }
 
     if (subdividing) {
-        if (position.x < 0) position.x = abs(position.x) * newScope.getSize().x;
-        if (position.y < 0) position.y = abs(position.y) * newScope.getSize().y;
-        if (position.z < 0) position.z = abs(position.z) * newScope.getSize().z;
+        glm::vec4 positionHomogenous(abs(position.x), abs(position.y), abs(position.z), 0.f);
+        positionHomogenous = newScope.getTransform() * positionHomogenous;
+        // position = glm::vec3(positionHomogenous.x, positionHomogenous.y, positionHomogenous.z);
+        if (position.x < 0) position.x = positionHomogenous.x;
+        if (position.y < 0) position.y = positionHomogenous.y;
+        if (position.z < 0) position.z = positionHomogenous.z;
     }
 
     newScope.T(position);

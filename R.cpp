@@ -1,9 +1,10 @@
 #include "R.h"
+#define DEG2RAD 0.017453292
 
 R::R(int axis_, float min_, float max_)
     : axis(axis_)
-    , angleMin(min_)
-    , angleMax(max_)
+    , angleMin(DEG2RAD * min_)
+    , angleMax(DEG2RAD * max_)
     {}
 
 R::~R()

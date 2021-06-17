@@ -64,7 +64,12 @@ glm::mat4 Scope::getTransform()
     glm::mat4 rotation(glm::vec4(x, 0.0f), glm::vec4(y, 0.0f), glm::vec4(z, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
     glm::mat4 translation(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), glm::vec4(position, 1.0f));
     glm::mat4 scale(glm::vec4(size.x, 0.0f, 0.0f, 0.0f), glm::vec4(0.0f, size.y, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, size.z, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    return translation * rotation * scale;
+    glm::mat4 transform = rotation * scale;
+    transform[3][0] = position.x;
+    transform[3][1] = position.y;
+    transform[3][2] = position.z;
+
+    return transform;
 }
 
 glm::vec3 Scope::getPosition() const
