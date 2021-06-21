@@ -22,6 +22,7 @@ The simplest thing we can do is instantiating a primitive shape, this is done as
 ```
 X -> I ( Cube )
 ```
+**IMPORTANT:** spaces must be respected as in the proposed examples. Otherwise, the grammar will not be parsed correctly.
 
 The accepted primitive shapes are:
 * **Cube**
@@ -49,14 +50,15 @@ Primitives are then instantiated to fit inside it.
 
 Some operations can be used to modify this scope in order to position the primitives where we wish:
 
-* **T ( dx dy dz )**: Translates the scope around its local space
-* **S ( sx sy sz )**: Sets the size of the scope along each dimension in its local space
+* **T ( dx dy dz )**: Translates the scope with *dx,dy,dz* being the translation vector in global coordinates.
+* **Tr ( dx dy dz )**: Translates the scope with *dx,dy,dz* being the translation vector in local coordinates.
+* **S ( sx sy sz )**: Sets the size of the scope along each dimension with respect to its parent scope.
 * **Rx ( angle )**: Rotates the scope around its local x axis
 * **Ry ( angle )**: Rotates the scope around its local y axis
 * **Rz ( angle )**: Rotates the scope around its local z axis
 
 ```
-X -> I ( Cylinder ) T ( 0.0 2.0 0.0 ) Rx ( 45.0 ) I ( Cylinder )
+X -> I ( Cylinder ) T ( 0.0 2.0 0.0 ) Ry ( 45.0 ) I ( Cylinder )
 ```
 
 
@@ -98,7 +100,7 @@ Ball -> I ( Sphere )
 The **Subdiv** operation subdivides the space represented by the current scope into several parts along one of its axis.
 It has the following signature:
 
-**Subdiv ( axis n f1 f2 ... fn ) ( s1 s2 ... sn)** where:
+**Subdiv ( axis n f1 f2 ... fn ) ( s1 s2 ... sn )** where:
 * axis is a number between 1 and 3 indicating the axis along which the space is subdivided
 * n indicates the number of partitions
 * fi indicates the fraction of space the i-th partition occupies
@@ -120,3 +122,31 @@ Base -> Block : 0.7 | Empty : 0.3
 Block -> Ry ( R ( 0.0 30.0 ) ) I ( Cube )
 Empty ->
 ```
+
+### City
+```
+X -> [ Floor ] T ( -50 0 5 ) City
+City -> S ( 120 1 120 ) Subdiv ( 3 10 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 ) ( Street Street Street Street Street Street Street Street Street Street )
+Street -> [ S ( 0.008 1 0.008 ) S ( 1 1 10 ) StreetBlocks ]
+Floor -> S ( 120 0.1 120 ) I ( Cube )
+StreetBlocks -> [ AddBuilding ] : 0.25 | [ AddBuilding ] [ Tr ( R ( 6 12 ) 0 0 ) StreetBlocks ] : 0.75
+
+AddBuilding -> Block : 0.9 | Dome : 0.1 
+Block ->  S ( 1 R ( 0.5 1.0 ) 1 ) [ BuildingOffset ] [ CornerOffset ] [ Ry ( 90 ) BuildingOffset ] [ Ry ( 90 ) CornerOffset ] [ Ry ( 180 ) BuildingOffset ] [ Ry ( 180 ) CornerOffset ] [ Ry ( 270 ) BuildingOffset ] [ Ry ( 270 ) CornerOffset ]
+CornerOffset -> [ Tr ( -2 0 0 ) BuildingOffset ] [ Tr ( 2 0 0 ) BuildingOffset ]
+BuildingOffset -> Tr ( 0 0 2 ) Building
+Building -> S ( 2 R ( 9 10 ) 2 ) I ( Cube ) [ WindowsX ] [ Sidewings ]
+
+Sidewings ->  Tr ( 0 0 0.5 ) Subdiv ( 1 3 0.2 0.4 0.4 ) ( Sidewing Sidewing Sidewing )
+Sidewing -> Tr ( 0.5 0 0 ) S ( 1 R ( 0.2 0.5 ) 0.3 ) I ( Cube ) : 0.4 | Empty : 0.6
+
+WindowsX -> Tr ( 0 0.2 0.5 ) Subdiv ( 2 4 0.25 0.25 0.25 0.25 ) ( Window Window Window Window )
+Window -> S ( 0.1 0.1 0.1 ) I ( Cube )
+
+Dome -> [ S ( R ( 5 6 ) R ( 30 35 ) R ( 5 6 ) ) I ( Sphere ) DomeDoors ]
+DomeDoors -> [ Tr ( 0.5 0 0 ) Door ] [ Tr ( -0.5 0 0 ) Door ] [ Tr ( 0 0 0.5 ) Door ] [ Tr ( 0 0 -0.5 ) Door ]
+Door -> [ S ( 0.07 0.03 0.07 ) I ( Cube ) ]
+
+Empty -> 
+```
+
