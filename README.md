@@ -8,7 +8,7 @@ To compile it just create a _build_ folder, run **cmake** and then **make**.
 
 ## Execution
 
-The program expects as input a grammar that specifies how we want to generate our buildings.  
+The program expects as input a grammar that specifies how we want to generate our buildings. This is specified in the [test.grammar](test.grammar) file.
 The output model is written in the same _build_ folder named as **test.ply**. For easy visualization, an option could be to load it in an [online viewer](https://www.creators3d.com/online-viewer).
 
 In the following section, we will be showing how this grammar can be specified.
