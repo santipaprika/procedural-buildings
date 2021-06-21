@@ -149,4 +149,10 @@ Door -> [ S ( 0.07 0.03 0.07 ) I ( Cube ) ]
 
 Empty -> 
 ```
+  
+  
+## Work distribution
+During the project we have discussed every step so that both of us know the details of the whole project. Still, we have delegated tasks in terms of design and implementation:  
+- **Guillem Pérez**: Generation of primitives. Design and implementation of the rule substitution engine.
+- **Santi Gonzalez**: Implementation of most available operations. File parsing, rule generation, and procedural application.
 
