@@ -150,6 +150,8 @@ Door -> [ S ( 0.07 0.03 0.07 ) I ( Cube ) ]
 
 Empty -> 
 ```
+
+More test samples can be found in [samples/grammar_samples](samples/grammar_samples).
   
   
 ## Work distribution
