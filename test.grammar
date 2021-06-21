@@ -1,8 +1,8 @@
-X -> [ Floor ] T ( -50 0 -50 ) City
-City -> Street City : 0.8 | Empty : 0.2
-Street -> [ StreetBlocks ] Tr ( 0 0 R ( 6 13 ) )
+X -> [ Floor ] T ( -50 0 5 ) City
+City -> S ( 120 1 120 ) Subdiv ( 3 10 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 ) ( Street Street Street Street Street Street Street Street Street Street )
+Street -> [ S ( 0.008 1 0.008 ) S ( 1 1 10 ) StreetBlocks ]
 Floor -> S ( 120 0.1 120 ) I ( Cube )
-StreetBlocks -> [ AddBuilding ] : 0.3 | [ AddBuilding ] [ Tr ( R ( 6 12 ) 0 0 ) StreetBlocks ] : 0.7
+StreetBlocks -> [ AddBuilding ] : 0.25 | [ AddBuilding ] [ Tr ( R ( 6 12 ) 0 0 ) StreetBlocks ] : 0.75
 
 AddBuilding -> Block : 0.9 | Dome : 0.1 
 Block ->  S ( 1 R ( 0.5 1.0 ) 1 ) [ BuildingOffset ] [ CornerOffset ] [ Ry ( 90 ) BuildingOffset ] [ Ry ( 90 ) CornerOffset ] [ Ry ( 180 ) BuildingOffset ] [ Ry ( 180 ) CornerOffset ] [ Ry ( 270 ) BuildingOffset ] [ Ry ( 270 ) CornerOffset ]
