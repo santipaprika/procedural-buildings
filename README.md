@@ -58,7 +58,7 @@ Some operations can be used to modify this scope in order to position the primit
 * **Rz ( angle )**: Rotates the scope around its local z axis
 
 ```
-X -> I ( Cylinder ) T ( 0.0 2.0 0.0 ) Ry ( 45.0 ) I ( Cylinder )
+X -> I ( Cylinder ) T ( 0.0 2.0 0.0 ) Rx ( 45.0 ) I ( Cylinder )
 ```
 
 
