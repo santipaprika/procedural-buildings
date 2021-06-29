@@ -1,5 +1,8 @@
 # procedural-buildings
 
+## Demo
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LCQWRYQ7m2Y/0.jpg)](https://youtu.be/LCQWRYQ7m2Y)
+
 ## Compilation
 
 The source code is provided as a CMake project that generates the **procedural_buildings** binary program.
