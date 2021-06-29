@@ -1,4 +1,6 @@
 # procedural-buildings
+## Description
+Procedural generator based on [shape grammar](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.112.183&rep=rep1&type=pdf) built in C++.
 
 ## Demo
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LCQWRYQ7m2Y/0.jpg)](https://youtu.be/LCQWRYQ7m2Y)
